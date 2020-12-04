@@ -1,17 +1,53 @@
+.matrix {
+  display: inline-grid;
+  grid-gap: 1em;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+  --rows: 5;
+  --columns: 5;
+}
+
+.matrix .matrix-add-column {
+  grid-area: 2 / var(--columns) / var(--rows) / var(--columns); 
+}
+
+.matrix .matrix-add-row {
+  grid-area: var(--rows) / 2 / var(--rows) / var(--columns);
+}
+
+.matrix .matrix-remove-column {
+  grid-area: 2 / 1 / var(--rows) / 1;
+}
+
+.matrix .matrix-remove-row {
+  grid-area: 1 / 2 / 1 / var(--columns);
+}
+
 #loading {
   z-index: 20;
-  pointer-events: none;
+  pointer-events: all;
   position: fixed;
   left: 0;
   top: 0;
   width: 100vw;
   height: 100vh;
+  opacity: 1;
+  transition: .2s ease opacity;
+}
+
+:root[loaded] #loading {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .center {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+input[type=submit] {
+  cursor: pointer;
 }
 
 * {
