@@ -28,18 +28,24 @@
     setSize(rows, columns) {
       rows = Math.max(rows, 1);
       columns = Math.max(columns, 1);
-      this.setAttribute('style', `--rows:${rows+2};--columns:${columns+2};`);
-      if (this.matrix) {
-        for (let child of this.matrix) {
-          child.remove();
-        }
-        delete this.matrix;
-      }
-      const total = rows*columns;
+      this.setAttribute('style', `--rows:${rows};--cols:${columns};`);
       this.size = { rows, columns };
-      this.matrix = new Array(total);
-      for (let i=0;i<total;i++) {
-        this.matrix[i] = this.appendChild(createElement('input', { type: 'submit', class: 'matrix-input', value: '0' }));
+
+      const total = rows*columns;
+      if (this.matrix) {
+        if (this.matrix.length > total) {
+          const removed = this.matrix.splice(total);
+          removed.forEach(node => node.remove);
+        } else {
+          for (let i=this.matrix.length;i<total;i++) {
+            this.matrix.push(this.appendChild(createElement('input', {type: 'submit', class: 'matrix-input', value: '0' })));
+          }
+        }
+      } else {
+        this.matrix = new Array(total);
+        for (let i=0;i<total;i++) {
+          this.matrix[i] = this.appendChild(createElement('input', { type: 'submit', class: 'matrix-input', value: '0' }));
+        }
       }
     }
     changeSize(rows, columns) {
@@ -65,6 +71,9 @@
         break;
         case 'matrix-remove-row':
         e.target.parentElement.changeSize(-1, 0);
+        break;
+        case 'matrix-input':
+        e.target.value = e.target.value === '0' ? '1' : '0';
         break;
       }
     }
